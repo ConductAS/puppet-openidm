@@ -50,8 +50,8 @@ class openidm (
   file { "${openidm::home}/conf/jetty.xml":
     ensure  => file,
     require => File["${openidm::home}/conf"],
-    owner   => "${openidm::system_user",
-    group   => "${openidm::system_group",
+    owner   => "${openidm::system_user}",
+    group   => "${openidm::system_group}",
     content => template("${module_name}/jetty.xml"),
   }
 
