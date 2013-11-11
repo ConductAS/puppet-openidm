@@ -18,8 +18,8 @@ class openidm::config {
     sourceselect => all,
     recurse => true,
     replace => true,
-    owner => '${system_user}',
-    group => '${system_group}',
+    owner => "${system_user}",
+    group => "${system_group}",
     mode => '0750'
   }
 
