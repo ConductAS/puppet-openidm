@@ -28,7 +28,7 @@ class openidm::config {
     owner   => "${system_user}",
     group   => "${system_group}",
     content => template("${module_name}/jetty.xml.erb"),
-    require => "${openidm::conf}"
+    require => File["${openidm::conf}"]
   }
   
   exec { "remove web console":
