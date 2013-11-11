@@ -1,6 +1,4 @@
-# == Class: openidm
-#
-# This 
+openidm::# == Class: openidm
 #
 # === Parameters
 #
@@ -25,29 +23,23 @@
 # Copyright 2013 Conduct AS
 #
 class openidm (
-  $port              = hiera('openidm_port', 8443),
-  $home              = hiera('openidm_home', '/var/lib/openidm'),
-  $admin_username    = hiera('openidm_admin_username', 'openidm-admin'),
-  $admin_password    = hiera('openidm_admin_password', 'openidm-admin'),
-  $keystore_file     = hiera('openidm_keystore_file', 'openidm.jkcs'),
-  $keystore_alias    = hiera('openidm_keystore_alias', 'openidm-sym-secure'),
-  $keystore_password = hiera('openidm_keystore_password', 'changeit'),
-  $system_user       = hiera('openidm_system_user', 'openidm'),
-  $system_group      = hiera('openidm_system_group', 'openidm'),
-  $database_root     = hiera('openidm_database_root'),
-  $database_host     = hiera('openidm_database_host', 'localhost'),
-  $database_port     = hiera('openidm_database_port', 3306),
-  $database_name     = hiera('openidm_database_name', 'openidm'),
-  $database_username = hiera('openidm_database_username', 'openidm'),
-  $database_password = hiera('openidm_database_password', 'openidm'),
+  $port              = hiera('openidm::port', 8443),
+  $home              = hiera('openidm::home', '/opt/openidm'),
+  $conf              = hiera('openidm::conf', '/etc/openidm'),
+  $java_home         = hiera('openidm::java_home'),
+  $admin_username    = hiera('openidm::admin_username', 'openidm-admin'),
+  $admin_password    = hiera('openidm::admin_password', 'openidm-admin'),
+  $keystore_file     = hiera('openidm::keystore_file', 'openidm.jkcs'),
+  $keystore_alias    = hiera('openidm::keystore_alias', 'openidm-sym-secure'),
+  $keystore_password = hiera('openidm::keystore_password', 'changeit'),
+  $system_user       = hiera('openidm::system_user', 'openidm'),
+  $system_group      = hiera('openidm::system_group', 'openidm')
 ) {
 
-  package { "openidm": ensure => present }
+  package { "openidm": ensure => installed }
 
   include openidm::config
   include openidm::keystore
-  include openidm::repository
 
   Class['openidm::config'] -> Class['openidm::keystore']
-  Class['openidm::keystore'] -> Class['openidm::repository']
 }

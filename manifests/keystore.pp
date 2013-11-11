@@ -13,7 +13,7 @@
 #
 class openidm::keystore {
 
-  $conf    = "${openidm::home}/conf"
+  $conf    = "${openidm::conf}"
   $keytool = "/usr/bin/keytool -keystore ${openidm::home}/security/${openidm::keystore_file} \
     -storepass ${openidm::keystore_password} -keypass ${openidm::keystore_password} -storetype JCEKS"
 
@@ -33,7 +33,7 @@ class openidm::keystore {
     require     => Exec["generate encryption key"],
   }
 
-  file { "${conf}/boot/boot.properties":
+  file { "${openidm::conf}/boot/boot.properties":
     ensure  => file,
     require => Exec["generate encryption key"],
     owner   => "${openidm::system_user}",

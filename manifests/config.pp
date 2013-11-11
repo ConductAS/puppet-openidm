@@ -12,34 +12,26 @@
 #
 class openidm::config {
 
-  $conf    = "${openidm::home}/conf"
-
-  file { "${conf}":
-    ensure  => directory,
+  file { "${openidm::conf}":
+    ensure => directory,
+    source => [ "puppet:///files/${module_name}/${environment}/config" ],
+    sourceselect => all,
     recurse => true,
-    replace => false, # OpenIDM updates configuration files during startup...
-    purge   => false,
-    require => Package["openidm"],
-    owner   => "${openidm::system_user}",
-    group   => "${openidm::system_group}",
-    source  => "puppet:///${module_name}/conf",
+    replace => true,
+    owner => '${system_user}',
+    group => '${system_group}',
+    mode => '0750'
   }
 
-  file { "${conf}/repo.orientdb.json":
-    ensure  => absent,
-    require => File["${conf}"],
-  }
-
-  file { "${conf}/jetty.xml":
+  file { "${openidm::conf}/jetty.xml":
     ensure  => file,
-    require => File["$conf"],
     owner   => "${system_user}",
     group   => "${system_group}",
     content => template("${module_name}/jetty.xml.erb"),
+    require => "${openidm::conf}"
   }
   
   exec { "remove web console":
     command => "/bin/rm -f ${openidm::home}/bundle/org.apache.felix.webconsole-*.jar",
-    require => File["${conf}"],
-  }
+  }   
 }
