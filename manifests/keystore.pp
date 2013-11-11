@@ -18,7 +18,7 @@ class openidm::keystore {
     -storepass ${openidm::keystore_password} -keypass ${openidm::keystore_password} -storetype JCEKS"
 
   exec { "generate encryption key":
-    cwd     => "${home}",
+    cwd     => "${openidm::home}",
     command => "${keytool} -genseckey -alias ${openidm::keystore_alias} -keyalg AES -keysize 128",
     onlyif  => "${keytool} -list -alias ${openidm::keystore_alias} | grep 'exist'",
     logoutput => "on_failure",
