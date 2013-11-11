@@ -18,15 +18,15 @@ class openidm::config {
     sourceselect => all,
     recurse => true,
     replace => true,
-    owner => "${system_user}",
-    group => "${system_group}",
+    owner => "${openidm::system_user}",
+    group => "${openidm::system_group}",
     mode => '0750'
   }
 
   file { "${openidm::conf}/jetty.xml":
     ensure  => file,
-    owner   => "${system_user}",
-    group   => "${system_group}",
+    owner   => "${openidm::system_user}",
+    group   => "${openidm::system_group}",
     content => template("${module_name}/jetty.xml.erb"),
     require => File["${openidm::conf}"]
   }
