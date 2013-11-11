@@ -1,4 +1,4 @@
-openidm::# == Class: openidm
+# == Class: openidm
 #
 # === Parameters
 #
