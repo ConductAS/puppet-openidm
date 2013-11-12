@@ -33,7 +33,7 @@ class openidm::keystore {
     require     => Exec["generate encryption key"],
   }
 
-  file { "${openidm::conf}/boot/boot.properties":
+  file { "${openidm::conf}/conf/boot/boot.properties":
     ensure  => file,
     require => Exec["generate encryption key"],
     owner   => "${openidm::system_user}",

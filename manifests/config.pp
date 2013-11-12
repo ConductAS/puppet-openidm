@@ -23,15 +23,6 @@ class openidm::config {
     mode => '0750'
   }
   
-  file { "${openidm::conf}/boot/boot.properties":
-    ensure => file,
-    template => "puppet:///${module_name}/boot.properties.erb",
-    owner => "${openidm::system_user}",
-    group => "${openidm::system_group}"
-    mode => "0750",
-    require => File["${openidm::conf}"]
-  }
-
   file { "${openidm::conf}/jetty.xml":
     ensure  => file,
     owner   => "${openidm::system_user}",
