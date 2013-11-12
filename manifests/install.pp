@@ -28,7 +28,7 @@ class openidm::install {
   
   file { "/opt/openidm/bundle/mysql-connector-java-5.1.22-bin.jar":
     ensure => file,
-    source => "puppet:///files/${module_name}/${environment}/bundle/mysql-connector-java-5.1.22-bin.jar",
+    source => "puppet:///files/${module_name}/${environment}/config/bundle/mysql-connector-java-5.1.22-bin.jar",
     owner => "${openidm::system_user}",
     group => "${openidm::system_group}",
     mode => '0750',
