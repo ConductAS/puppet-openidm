@@ -22,6 +22,15 @@ class openidm::config {
     group => "${openidm::system_group}",
     mode => '0750'
   }
+  
+  file { "${openidm::conf}/boot/boot.properties":
+    ensure => file,
+    template => "puppet:///${module_name}/boot.properties.erb",
+    owner => "${openidm::system_user}",
+    group => "${openidm::system_group}"
+    mode => "0750",
+    require => File["${openidm::conf}"]
+  }
 
   file { "${openidm::conf}/jetty.xml":
     ensure  => file,
@@ -33,8 +42,15 @@ class openidm::config {
   
   file { "/opt/openidm/conf":
     ensure => link,
-    target => "${openidm::conf}",
+    target => "${openidm::conf}/conf",
     force => true, 
+    require => File["/opt/openidm"]
+  }
+  
+  file { "/opt/openidm/script":
+    ensure => link,
+    target => "${openidm::conf}/script",
+    force => true,
     require => File["/opt/openidm"]
   }
   
