@@ -20,7 +20,7 @@ class openidm::install {
     source => "puppet:///files/${module_name}/openidm-zip",
     sourceselect => all,
     recurse => true,
-    replace => true,
+    replace => false,
     owner => "${openidm::system_user}",
     group => "${openidm::system_group}",
     mode => '0750'
