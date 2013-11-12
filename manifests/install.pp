@@ -21,8 +21,8 @@ class openidm::install {
     sourceselect => all,
     recurse => true,
     replace => true,
-    owner => '${openidm::system_user}',
-    group => '${openidm::system_group}',
+    owner => "${openidm::system_user}",
+    group => "${openidm::system_group}",
     mode => '0750'
   }
   
