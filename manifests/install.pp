@@ -26,10 +26,5 @@ class openidm::install {
     mode => '0750'
   }
   
-  file { "/opt/openidm/conf":
-    ensure => link,
-    target => "${openidm::conf}",
-    force => true, 
-    require => File["/opt/openidm"]
-  }
+
 }

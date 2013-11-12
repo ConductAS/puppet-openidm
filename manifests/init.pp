@@ -37,8 +37,8 @@ class openidm (
   $system_group      = hiera('openidm::system_group', 'openidm')
 ) {
 
-  include openidm::install
   include openidm::config
+  include openidm::install
   include openidm::keystore
 
   Class['openidm::install'] -> Class['openidm::config']

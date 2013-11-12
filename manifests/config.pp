@@ -31,7 +31,15 @@ class openidm::config {
     require => File["${openidm::conf}"]
   }
   
+  file { "/opt/openidm/conf":
+    ensure => link,
+    target => "${openidm::conf}",
+    force => true, 
+    require => File["/opt/openidm"]
+  }
+  
   exec { "remove web console":
     command => "/bin/rm -f ${openidm::home}/bundle/org.apache.felix.webconsole-*.jar",
-  }   
+    require => File["/opt/openidm/conf"]
+  }
 }
