@@ -26,6 +26,7 @@ class openidm (
   $port              = hiera('openidm::port', 8443),
   $home              = hiera('openidm::home', '/opt/openidm'),
   $conf              = hiera('openidm::conf', '/etc/openidm'),
+  $binary            = hiera('openidm::binary', 'openidm-2.1.zip'),
   $java_home         = hiera('openidm::java_home'),
   $admin_username    = hiera('openidm::admin_username', 'openidm-admin'),
   $admin_password    = hiera('openidm::admin_password', 'openidm-admin'),
@@ -36,10 +37,10 @@ class openidm (
   $system_group      = hiera('openidm::system_group', 'openidm')
 ) {
 
-  package { "openidm": ensure => installed }
-
+  include openidm::install
   include openidm::config
   include openidm::keystore
 
-  Class['openidm::config'] -> Class['openidm::keystore']
+  Class['openidm::install'] -> Class['openidm::config']
+  Class['openidm::config']  -> Class['openidm::keystore']
 }
