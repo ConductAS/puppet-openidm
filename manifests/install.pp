@@ -14,25 +14,30 @@
 # Copyright 2013 Conduct AS
 #
 class openidm::install {
+  
+  package { "unzip" : ensure => installed }
 
-  file { "/opt/openidm":
-    ensure => directory,
-    source => "puppet:///files/${module_name}/openidm-zip",
-    sourceselect => all,
-    recurse => true,
-    replace => false,
+
+  file { "/var/tmp/${openidm::binary}":
+    ensure => file,
+    source => "puppet:///files/${module_name}/${openidm::binary}",
     owner => "${openidm::system_user}",
     group => "${openidm::system_group}",
-    mode => '0750'
+    mode => '0700',
   }
   
-  file { "/opt/openidm/bundle/mysql-connector-java-5.1.22-bin.jar":
+  exec { "install openidm":
+    require => Package["unzip"],
+    command => "/usr/bin/unzip /var/tmp/${openidm::binary} -d /opt && chown -R ${openidm::system_user}:${openidm::system_group} ${openidm::home}",
+    creates => "${openidm::home}"
+  }
+  
+  file { "${openidm::home}/bundle/mysql-connector-java-5.1.22-bin.jar":
     ensure => file,
     source => "puppet:///files/${module_name}/${environment}/config/bundle/mysql-connector-java-5.1.22-bin.jar",
     owner => "${openidm::system_user}",
     group => "${openidm::system_group}",
-    mode => '0750',
-    require => File["/opt/openidm"]
+    mode => '0644',
+    require => Exec["install openidm"]
   }
-
 }
