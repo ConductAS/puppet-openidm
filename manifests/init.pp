@@ -4,14 +4,10 @@
 #
 # The module takes the following parameters:
 #
-# [*port*]
-#   The port which OpenIDM accepts connections. Only secure transport
-#   (SSL) is supported with this module.
-#
 # === Examples
 #
 #  class { openidm:
-#    port => 8443,
+#    port => 8888,
 #  }
 #
 # === Authors
@@ -23,10 +19,12 @@
 # Copyright 2013 Conduct AS
 #
 class openidm (
-  $port              = hiera('openidm::port', 8443),
+  $port              = hiera('openidm::port', 8080),
+  $https_port        = hiera('openidm::https_port', undef),
+  $mutual_auth_port  = hiera('openidm::mutual_auth_port', undef),
   $home              = hiera('openidm::home', '/opt/openidm'),
   $conf              = hiera('openidm::conf', '/etc/openidm'),
-  $binary            = hiera('openidm::binary', 'openidm-2.1.zip'),
+  $binary            = hiera('openidm::binary', 'openidm-2.1.1.zip'),
   $java_home         = hiera('openidm::java_home'),
   $admin_username    = hiera('openidm::admin_username', 'openidm-admin'),
   $admin_password    = hiera('openidm::admin_password', 'openidm-admin'),

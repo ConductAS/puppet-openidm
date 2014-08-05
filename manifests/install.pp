@@ -16,7 +16,7 @@
 class openidm::install {
   
   package { "unzip" : ensure => installed }
-
+  package { "java-1.7.0-openjdk-devel" : ensure => installed }
 
   file { "/var/tmp/${openidm::binary}":
     ensure => file,
@@ -28,15 +28,15 @@ class openidm::install {
   
   exec { "install openidm":
     require => Package["unzip"],
-    command => "/usr/bin/unzip /var/tmp/${openidm::binary} -d /opt && chown -R ${openidm::system_user}:${openidm::system_group} ${openidm::home}",
+    command => "/usr/bin/unzip /var/tmp/${openidm::binary} -d /opt",
     creates => "${openidm::home}"
   }
   
   file { "${openidm::home}/bundle/mysql-connector-java-5.1.22-bin.jar":
     ensure => file,
     source => "puppet:///files/${module_name}/${environment}/config/bundle/mysql-connector-java-5.1.22-bin.jar",
-    owner => "${openidm::system_user}",
-    group => "${openidm::system_group}",
+    owner => "root",
+    group => "root",
     mode => '0644',
     require => Exec["install openidm"]
   }
