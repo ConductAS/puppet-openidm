@@ -42,6 +42,6 @@ class openidm (
   include openidm::config
   include openidm::keystore
 
-  Class['openidm::install'] -> Class['openidm::service'] -> 
-  Class['openidm::config']  -> Class['openidm::keystore']
+  Class['openidm::install'] -> Class['openidm::config'] -> 
+  Class['openidm::service'] -> Class['openidm::keystore']
 }

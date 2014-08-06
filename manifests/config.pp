@@ -14,7 +14,7 @@ class openidm::config {
 
   file { "${openidm::conf}":
     ensure => directory,
-    source => [ "puppet:///files/${module_name}/${environment}" ],
+    source => [ "puppet:///conf/${module_name}/${environment}" ],
     sourceselect => all,
     recurse => true,
     replace => true,
@@ -45,11 +45,6 @@ class openidm::config {
     group   => "${openidm::system_group}",
     content => template("${module_name}/jetty.xml.erb"),
     require => File["${openidm::conf}/conf"]
-  }
-  
-  exec { "remove web console":
-    command => "/bin/rm -f ${openidm::home}/bundle/org.apache.felix.webconsole-*.jar",
-    require => Exec["install openidm"]
   }
 
   file { "${openidm::home}/update_admin_crypto.sh":
