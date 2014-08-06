@@ -14,13 +14,29 @@ class openidm::config {
 
   file { "${openidm::conf}":
     ensure => directory,
-    source => [ "puppet:///files/${module_name}/${environment}/config" ],
+    source => [ "puppet:///files/${module_name}/${environment}" ],
     sourceselect => all,
     recurse => true,
     replace => true,
     owner => "${openidm::system_user}",
     group => "${openidm::system_group}",
     mode => '0750'
+  }
+  
+  file { "${openidm::conf}/conf":
+     ensure => directory,
+     owner => "${openidm::system_user}",
+     group => "${openidm::system_group}",
+     mode => '0750',
+     require => File["${openidm::conf}"]
+  }
+  
+  file { "${openidm::conf}/conf/boot":
+    ensure => directory,
+    owner => "${openidm::system_user}",
+    group => "${openidm::system_group}",
+    mode => '0750',
+    require => File["${openidm::conf}/conf"]
   }
   
   file { "${openidm::conf}/conf/jetty.xml":
@@ -28,43 +44,18 @@ class openidm::config {
     owner   => "${openidm::system_user}",
     group   => "${openidm::system_group}",
     content => template("${module_name}/jetty.xml.erb"),
-    require => File["${openidm::conf}"]
-  }
-  
-  file { "${openidm::conf}/connectors":
-    ensure => directory,
-    source => "puppet:///files/${module_name}/${environment}/connectors",
-    sourceselect => all,
-    recurse => true,
-    replace => true,
-    owner => "${openidm::system_user}",
-    group => "${openidm::system_group}",
-    mode => '0750'
-  }
-  
-  file { "${openidm::home}/conf":
-    ensure => link,
-    target => "${openidm::conf}/conf",
-    force => true, 
-    require => Exec["install openidm"]
-  }
-  
-  file { "${openidm::home}/script":
-    ensure => link,
-    target => "${openidm::conf}/script",
-    force => true,
-    require => Exec["install openidm"]
-  }
-  
-  file { "${openidm::home}/connectors":
-    ensure => link,
-    target => "${openidm::conf}/connectors",
-    force => true,
-    require => Exec["install openidm"]
+    require => File["${openidm::conf}/conf"]
   }
   
   exec { "remove web console":
     command => "/bin/rm -f ${openidm::home}/bundle/org.apache.felix.webconsole-*.jar",
     require => Exec["install openidm"]
+  }
+
+  file { "${openidm::home}/update_admin_crypto.sh":
+    source => [ "puppet:///modules/${module_name}/update_admin_crypto.sh" ],
+    owner => "root",
+    group => "root",
+    mode => '0750',
   }
 }

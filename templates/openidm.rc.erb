@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# chkconfig: 345 95 5
+# description: start/stop openidm
+
+# clean up left over pid files if necessary
+cleanupPidFile() {
+  if [ -f $OPENIDM_PID_FILE ]; then
+    rm -f "$OPENIDM_PID_FILE"
+  fi
+  trap - EXIT
+  exit
+}
+
+JAVA_BIN=<%= @java_home %>/bin/java
+OPENIDM_HOME=<%= @home %>
+OPENIDM_CONF=<%= @conf %>
+OPENIDM_USER=<%= @system_user %>
+OPENIDM_PID_FILE=/tmp/openidm/openidm.pid
+OPENIDM_OPTS="<%= @java_opts %>"
+
+cd ${OPENIDM_HOME}
+
+# Set JDK Logger config file if it is present and an override has not been issued
+if [ -z "$LOGGING_CONFIG" ]; then
+  if [ -r "$OPENIDM_HOME"/conf/logging.properties ]; then
+    LOGGING_CONFIG="-Djava.util.logging.config.file=$OPENIDM_HOME/conf/logging.properties"
+  else
+    LOGGING_CONFIG="-Dnop"
+  fi
+fi
+
+CLASSPATH="$OPENIDM_HOME"/bin/felix.jar:"$OPENIDM_HOME"/bin/openidm.jar
+
+START_CMD="nohup $JAVA_BIN $LOGGING_CONFIG $JAVA_OPTS $OPENIDM_OPTS -Djava.endorsed.dirs=$JAVA_ENDORSED_DIRS \
+		-Djava.security.auth.login.config=security/jaas-repo.conf  -classpath $CLASSPATH \
+		-Dopenidm.system.server.root=$OPENIDM_HOME -Dignore.openidm.system.server.environment=\"dev|test|qa|prod\" \
+		-Dfelix.startup.daemon=true org.apache.felix.main.Main >> logs/server.out 2>&1 &"
+
+
+CLASSPATH="$OPENIDM_HOME/bin/*:$OPENIDM_HOME/framework/*"
+
+
+START_CMD="nohup $JAVA_BIN $LOGGING_CONFIG $JAVA_OPTS $OPENIDM_OPTS \
+        -Djava.endorsed.dirs=$JAVA_ENDORSED_DIRS \
+        -classpath $CLASSPATH \
+        -Dopenidm.system.server.root=$OPENIDM_HOME \
+        -Djava.awt.headless=true \
+        org.forgerock.commons.launcher.Main -c bin/launcher.json -p $OPENIDM_CONF >> logs/server.out 2>&1 &"
+
+
+case "${1}" in
+start)
+  if [ -f $OPENIDM_PID_FILE ]; then
+    OPENIDM_PID=`cat $OPENIDM_PID_FILE`
+    if kill -0 $OPENIDM_PID > /dev/null 2>&1; then
+      echo "OpenIDM ($OPENIDM_PID) already running"
+      exit 1
+    fi
+  fi
+	su $OPENIDM_USER -s /bin/bash -c "$START_CMD eval echo \$\! > $OPENIDM_PID_FILE"
+  OPENIDM_PID=`cat $OPENIDM_PID_FILE`
+  echo "OpenIDM ($OPENIDM_PID) started"
+  exit 0
+  ;;
+stop)
+  if [ -f $OPENIDM_PID_FILE ]; then
+    OPENIDM_PID=`cat $OPENIDM_PID_FILE`
+    if kill $OPENIDM_PID > /dev/null 2>&1; then
+      sleep 2
+      if kill -0 $OPENIDM_PID > /dev/null 2>&1; then
+        echo "Failed to stop OpenIDM ($OPENIDM_PID) - still running"
+        exit 1
+      else
+        echo "OpenIDM ($OPENIDM_PID) stopped"
+        exit 0
+      fi
+    fi
+  fi
+  ;;
+restart)
+  /etc/init.d/openidm stop && sleep 3 && /etc/init.d/openidm start
+  ;;
+*)
+  echo "Usage: openidm { start | stop | restart }"
+  exit 1
+  ;;
+esac

@@ -12,21 +12,22 @@
 #
 class openidm::service {
 
-  file { "/etc/init.d/opendim":
+  file { "/etc/init.d/openidm":
     ensure => file,
     owner => "root",
-    group => "root"
+    group => "root",
     mode => 0700,
     content => template("${module_name}/openidm.rc.erb")
   }
   
-  service { "openidm":
+  service { "${module_name}":
+      require => File['/etc/init.d/openidm'],
       ensure => running,
       hasstatus => true,
       hasrestart => true,
-      start => "service ${name} start",
-      stop => "service ${name} stop",
-      restart => "service ${name} restart"
+      start => "service ${module_name} start",
+      stop => "service ${module_name} stop",
+      restart => "service ${module_name} restart"
   }  
   
 }

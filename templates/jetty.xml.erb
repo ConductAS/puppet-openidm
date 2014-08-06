@@ -28,7 +28,6 @@ DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
                 </New>
             </Item>
             
-            <% if defined? @https_port %>
             <Item>
                 <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector">
                     <Set name="Port"><%= @https_port %></Set>
@@ -43,10 +42,8 @@ DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
                     <Set name="needClientAuth">false</Set>
                 </New>
             </Item>
-            <% end %>
             
             <!-- Port set up to require SSL mutual authentication only -->
-            <% if defined? @mutual_auth_port %>
             <Item>
                 <New class="org.eclipse.jetty.server.ssl.SslSelectChannelConnector" id="MutualAuthPort">
                     <Set name="Port"><%= @mutual_auth_port %></Set>
@@ -62,7 +59,6 @@ DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
                     <Call class="org.forgerock.openidm.jetty.DisableOpenIDMAuth" name="add"><Arg><Ref id="MutualAuthPort"/></Arg></Call>
                 </New>
             </Item>
-            <% end %>
         </Array>
     </Set>
 
