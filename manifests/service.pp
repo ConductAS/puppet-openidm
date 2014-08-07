@@ -22,7 +22,6 @@ class openidm::service {
   
   service { "${module_name}":
     require => File['/etc/init.d/openidm'],
-    ensure => present,
     hasstatus => true,
     hasrestart => true,
     start => "service ${module_name} start",

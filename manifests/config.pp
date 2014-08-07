@@ -15,7 +15,7 @@ class openidm::config {
   file { "${openidm::conf}":
     ensure => directory,
     source => [ "puppet:///conf/${module_name}/${environment}" ],
-    # sourceselect => all,
+    sourceselect => all,
     recurse => true,
     replace => true,
     owner => "${openidm::system_user}",
@@ -23,28 +23,13 @@ class openidm::config {
     mode => '0750'
   }
   
-  file { "${openidm::conf}/conf":
-     ensure => directory,
-     owner => "${openidm::system_user}",
-     group => "${openidm::system_group}",
-     mode => '0750',
-     require => File["${openidm::conf}"]
-  }
-  
-  file { "${openidm::conf}/conf/boot":
-    ensure => directory,
-    owner => "${openidm::system_user}",
-    group => "${openidm::system_group}",
-    mode => '0750',
-    require => File["${openidm::conf}/conf"]
-  }
-  
   file { "${openidm::conf}/conf/jetty.xml":
     ensure  => file,
     owner   => "${openidm::system_user}",
     group   => "${openidm::system_group}",
     content => template("${module_name}/jetty.xml.erb"),
-    require => File["${openidm::conf}/conf"]
+    require => File["${openidm::conf}"],
+    mode => '0750'
   }
 
   file { "${openidm::home}/update_admin_crypto.sh":
