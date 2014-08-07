@@ -19,19 +19,17 @@ provided in `/etc/init.d/openidm`.
 The module attempts to copy configuration files from
 `puppet:///conf/openidm/$environment` to `/etc/openidm`.
 
-### Directory structure for OpenIDM configuration on Puppet Master
+### Puppet Master directory structure for configuration
 ```
-/path/to/configuration/openidm
-  /path/to/configuration/openidm/$environment
-    /path/to/configuration/openidm/$environment/conf
-      /path/to/configuration/openidm/$environment/conf/authentication.json
+/path/to/configuration/openidm/
+  $environment/
+    conf/
+      authentication.json
       ...
-    /path/to/configuration/openidm/$environment/script
-      /path/to/configuration/openidm//development/script/access.js
+    script/
+      access.js
+      authentication.js
       ...    
-    /path/to/configuration/openidm//development/workflow
-      /path/to/configuration/openidm//development/workflow/example.bpmn20.xml
-      ...
 ```
 
 ### fileserver.conf
