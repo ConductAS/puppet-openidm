@@ -21,13 +21,13 @@ class openidm::service {
   }
   
   service { "${module_name}":
-      require => File['/etc/init.d/openidm'],
-      ensure => running,
-      hasstatus => true,
-      hasrestart => true,
-      start => "service ${module_name} start",
-      stop => "service ${module_name} stop",
-      restart => "service ${module_name} restart"
+    require => File['/etc/init.d/openidm'],
+    ensure => present,
+    hasstatus => true,
+    hasrestart => true,
+    start => "service ${module_name} start",
+    stop => "service ${module_name} stop",
+    restart => "service ${module_name} restart"
   }  
   
 }

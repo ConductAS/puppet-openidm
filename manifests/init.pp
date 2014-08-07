@@ -38,10 +38,10 @@ class openidm (
 ) {
 
   include openidm::install
-  include openidm::service
   include openidm::config
   include openidm::keystore
+  include openidm::service
 
   Class['openidm::install'] -> Class['openidm::config'] -> 
-  Class['openidm::service'] -> Class['openidm::keystore']
+  Class['openidm::keystore'] -> Class['openidm::service']
 }

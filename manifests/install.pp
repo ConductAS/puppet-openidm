@@ -80,7 +80,7 @@ class openidm::install {
     require => Exec["install openidm"]
   }
   
-  file { ["/tmp/openidm", "/tmp/openidm/cache"]:
+  file { ["/tmp/openidm", "/tmp/openidm/felix-cache"]:
     ensure => directory,
     recurse => true,
     owner => "${openidm::system_user}",
@@ -89,7 +89,7 @@ class openidm::install {
   
   file { "${openidm::home}/felix-cache":
     ensure => link,
-    target => "/tmp/openidm/cache",
+    target => "/tmp/openidm/felix-cache",
     force => true,
     require => [ Exec["install openidm"], File["/tmp/openidm/cache"] ]
   }
