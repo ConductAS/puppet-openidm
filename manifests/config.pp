@@ -14,7 +14,7 @@ class openidm::config {
 
   file { "${openidm::conf}":
     ensure => directory,
-    source => [ "puppet:///conf/${module_name}/${environment}" ],
+    source => [ "puppet:///files/${module_name}/${environment}" ],
     sourceselect => all,
     recurse => true,
     replace => true,
