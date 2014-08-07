@@ -17,9 +17,12 @@ e.g. `/etc/openidm` and that OpenIDM is started with the startup script
 provided in `/etc/init.d/openidm`.
 
 The module attempts to copy configuration files from
-`puppet:///conf/openidm/$environment` to `/etc/openidm`.
+`puppet:///conf/openidm/$environment` to `/etc/openidm`. Thus,
+a mount point `conf` must be defined in `fileserver.conf`.
 
-### Puppet Master directory structure for configuration
+### Example
+
+#### Puppet Master directory structure for configuration
 ```
 /path/to/configuration/openidm/
   $environment/
@@ -32,7 +35,7 @@ The module attempts to copy configuration files from
       ...    
 ```
 
-### fileserver.conf
+#### fileserver.conf
 ```
 [conf]
   path /path/to/configuration
