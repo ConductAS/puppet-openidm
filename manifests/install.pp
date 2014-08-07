@@ -91,7 +91,7 @@ class openidm::install {
     ensure => link,
     target => "/tmp/openidm/felix-cache",
     force => true,
-    require => [ Exec["install openidm"], File["/tmp/openidm/cache"] ]
+    require => [ Exec["install openidm"], File["/tmp/openidm/felix-cache"] ]
   }
   
   file { "${openidm::home}/startup.sh":
