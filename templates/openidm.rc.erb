@@ -30,24 +30,14 @@ if [ -z "$LOGGING_CONFIG" ]; then
   fi
 fi
 
-CLASSPATH="$OPENIDM_HOME"/bin/felix.jar:"$OPENIDM_HOME"/bin/openidm.jar
-
-START_CMD="nohup $JAVA_BIN $LOGGING_CONFIG $JAVA_OPTS $OPENIDM_OPTS -Djava.endorsed.dirs=$JAVA_ENDORSED_DIRS \
-		-Djava.security.auth.login.config=security/jaas-repo.conf  -classpath $CLASSPATH \
-		-Dopenidm.system.server.root=$OPENIDM_HOME -Dignore.openidm.system.server.environment=\"dev|test|qa|prod\" \
-		-Dfelix.startup.daemon=true org.apache.felix.main.Main >> logs/server.out 2>&1 &"
-
-
 CLASSPATH="$OPENIDM_HOME/bin/*:$OPENIDM_HOME/framework/*"
-
 
 START_CMD="nohup $JAVA_BIN $LOGGING_CONFIG $JAVA_OPTS $OPENIDM_OPTS \
         -Djava.endorsed.dirs=$JAVA_ENDORSED_DIRS \
-        -classpath $CLASSPATH \
+        -classpath \"$CLASSPATH\" \
         -Dopenidm.system.server.root=$OPENIDM_HOME \
         -Djava.awt.headless=true \
         org.forgerock.commons.launcher.Main -c bin/launcher.json -p $OPENIDM_CONF >> logs/server.out 2>&1 &"
-
 
 case "${1}" in
 start)
@@ -58,7 +48,7 @@ start)
       exit 1
     fi
   fi
-	su $OPENIDM_USER -s /bin/bash -c "$START_CMD eval echo \$\! > $OPENIDM_PID_FILE"
+  su $OPENIDM_USER -s /bin/bash -c "$START_CMD eval echo \$\! > $OPENIDM_PID_FILE"
   OPENIDM_PID=`cat $OPENIDM_PID_FILE`
   echo "OpenIDM ($OPENIDM_PID) started"
   exit 0
