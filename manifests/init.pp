@@ -26,6 +26,7 @@ class openidm (
   $conf              = hiera('openidm::conf', '/etc/openidm'),
   $binary            = hiera('openidm::binary', 'openidm-2.1.1.zip'),
   $java_home         = hiera('openidm::java_home'),
+  $java_devel_pkg    = hiera('openidm::java_devel_pkg','java-1.7.0-openjdk-devel'),
   $java_opts         = hiera('openidm::java_opts', '-Xmx1024m -Dfile.encoding=UTF-8'),
   $admin_username    = hiera('openidm::admin_username', 'openidm-admin'),
   $admin_password    = hiera('openidm::admin_password', 'openidm-admin'),
@@ -42,6 +43,6 @@ class openidm (
   include openidm::keystore
   include openidm::service
 
-  Class['openidm::install'] -> Class['openidm::config'] -> 
+  Class['openidm::install'] -> Class['openidm::config'] ->
   Class['openidm::keystore'] -> Class['openidm::service']
 }

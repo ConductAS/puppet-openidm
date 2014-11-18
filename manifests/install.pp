@@ -16,7 +16,7 @@
 class openidm::install {
   
   package { "unzip" : ensure => installed }
-  package { "java-1.7.0-openjdk-devel" : ensure => installed }
+  package { "${java_devel_pkg}" : ensure => installed }
   
   group { "openidm":
       ensure => present,
