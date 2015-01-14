@@ -16,7 +16,7 @@ JAVA_BIN=<%= @java_home %>/bin/java
 OPENIDM_HOME=<%= @home %>
 OPENIDM_CONF=<%= @conf %>
 OPENIDM_USER=<%= @system_user %>
-OPENIDM_PID_FILE=/tmp/openidm/openidm.pid
+OPENIDM_PID_FILE=/var/run/openidm.pid
 OPENIDM_OPTS="<%= @java_opts %>"
 
 cd ${OPENIDM_HOME}
@@ -48,6 +48,8 @@ start)
       exit 1
     fi
   fi
+  touch $OPENIDM_PID_FILE
+  chown $OPENIDM_USER:$OPENIDM_USER $OPENIDM_PID_FILE
   su $OPENIDM_USER -s /bin/bash -c "$START_CMD eval echo \$\! > $OPENIDM_PID_FILE"
   OPENIDM_PID=`cat $OPENIDM_PID_FILE`
   echo "OpenIDM ($OPENIDM_PID) started"
@@ -63,6 +65,7 @@ stop)
         exit 1
       else
         echo "OpenIDM ($OPENIDM_PID) stopped"
+        cleanupPidFile()
         exit 0
       fi
     fi
